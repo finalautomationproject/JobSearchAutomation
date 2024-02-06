@@ -1,0 +1,24 @@
+{% extends 'jobseeker/base.html' %}
+
+{% block title %} Search Jobs {% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Search Jobs</h2>
+    <form method="POST" class="row g-3">
+        {% csrf_token %}
+        <div class="col-md-6">
+            <label for="linkedin_search" class="form-label">LinkedIn Search:</label>
+            <div class="input-group">
+                <button type="submit" name="Linkedinsearch" class="btn btn-primary">Search on LinkedIn</button>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="indeed_search" class="form-label">Indeed Search:</label>
+            <div class="input-group">
+                <button type="submit" name="Indeedsearch" class="btn btn-primary">Search on Indeed</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

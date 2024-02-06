@@ -55,9 +55,7 @@ class EasyApplyLinkedin:
         EC.presence_of_element_located((By.CSS_SELECTOR, 'span[title="Jobs"]'))
         )
         jobs_link.click()
-        # go to Jobs
-        jobs_link = self.driver.find_element(By.CSS_SELECTOR, 'span[title="Jobs"]')
-        jobs_link.click()
+    
     def job_search(self):
         # search based on keywords and location and hit enter
         search_keywords = self.driver.find_element(By.CLASS_NAME, 'jobs-search-box__text-input')
@@ -67,9 +65,11 @@ class EasyApplyLinkedin:
         search_location.clear()
         search_location.send_keys(self.location)
         search_location.send_keys(Keys.RETURN)
+   
 
     def filter(self):
         """This function filters all the job results by 'Easy Apply'"""
+        #self.driver.get("https://www.linkedin.com/jobs/search/?currentJobId=3802046228&f_AL=true&geoId=100710459&keywords=python%20developer&location=Kenya&origin=JOB_SEARCH_PAGE_SEARCH_BUTTON&refresh=true&sortBy=R")
 
         # select all filters, click on Easy Apply and apply the filter
         easy_filters_button = WebDriverWait(self.driver, 70).until(
@@ -92,13 +92,44 @@ class EasyApplyLinkedin:
     def find_offers(self):
         """This function finds all the offers through all the pages result of the search and filter"""
 
-       # class="job-card-container__metadata-wrapper"
-#        job_card_button = WebDriverWait(self.driver, 70).until(
-#       EC.presence_of_element_located((By.CLASS_NAME, 'job-card-container__metadata-wrapper'))
- #       )
-  #      job_card_button.click()
 
-        #class="jobs-apply-button artdeco-button artdeco-button--icon-right artdeco-button--3 artdeco-button--primary ember-view"
+
+    def scrape_offers(self):
+        # Find all elements with the specified class name
+        elements = WebDriverWait(self.driver, 30).until(
+        EC.presence_of_all_elements_located((By.CLASS_NAME, "job-card-container"))
+        )
+        jobresults = []
+        # Iterate over each element
+        for element in elements:
+            # Extract data from each element
+            title = element.find_element(By.CLASS_NAME, "job-card-list__title").text
+            company = element.find_element(By.CLASS_NAME, "job-card-container__primary-description").text
+            location = element.find_element(By.CLASS_NAME, "job-card-container__metadata-item").text
+    
+            # Print the extracted data
+            print("Title:", title)
+            print("Company:", company)
+            print("Location:", location)
+            print("-" * 50)
+
+            jobresult = {title, company, location}
+            jobresults.append(jobresult)
+            return jobresults
+
+
+
+    # pagination = WebDriverWait(driver, 70).until(
+    #     EC.presence_of_element_located((By.CLASS_NAME, "artdeco-pagination__pages--number"))
+    # )
+    # buttons = pagination.find_elements(By.TAG_NAME, "button")
+    # for button in buttons:
+    #     driver.execute_script("arguments[0].scrollIntoView(true);", button)
+    #     button.click()
+            
+
+
+    def appply_to_job(self):
         time.sleep(10)
         job_apply_button = WebDriverWait(self.driver, 70).until(
     
@@ -252,9 +283,17 @@ class EasyApplyLinkedin:
         time.sleep(5)
         self.filter()
         time.sleep(2)
-        self.find_offers()
-        time.sleep(2)
-        self.close_session()
 
 
+# data = {
+#     'email': "ekoech.mboya@gmail.com",
+#     'password': 'enock2005',
+#     'keywords': ['python ', 'django ', 'automation'],
+#     'location': 'Kenya'
+#     }
+
+
+#             # Initialize your automation script with user data
+# bot = EasyApplyLinkedin(data)
+# bot.apply()
 

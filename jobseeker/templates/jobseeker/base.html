@@ -4,9 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Seeking Automation</title>
+
+    <title>{%block title%}{%endblock%}</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        .search-input-container {
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+    
+        .inputs-row {
+            margin-bottom: 10px;
+        }
+    
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+    
+        .form-control:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+    
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+        }
+    
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    
+        .btn-primary:focus {
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+        }
+    
+        .font-caption {
+            font-size: 0.8rem;
+        }
+        .card-img-top {
+        max-width: 100%;
+        height: auto;
+        max-height: 100px; /* Adjust as needed */
+        object-fit: contain;
+    }
+    .content-area {
+    padding-bottom: 70px; /* Adjust as needed */
+}
+    </style>
     <!-- Your additional CSS files or styles -->
     <!-- ... -->
 </head>
@@ -17,7 +78,7 @@
 {%include "jobseeker/navbar.html"%}
 
     <!-- Page content -->
-    <div class="container">
+    <div class="container content-area">
         {% block content %}
         <!-- Content of each page will go here -->
         {% endblock %}

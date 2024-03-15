@@ -11,10 +11,10 @@
                 <li class="list-group-item">
                     <h4>{{ job.job_title }}</h4>
                     {% if job.company_name %}
-                        <p>{{ job.company_name }}</p>
+                        <p>Company: {{ job.company_name }}</p>
                     {% endif %}
                     {% if job.job_description %}
-                        <p>{{ job.job_description }}</p>
+                        <p>Description: {{ job.job_description }}</p>
                     {% endif %}
                     {% if job.application_url %}
                         <a href="{{ job.application_url }}" class="btn btn-primary">Apply</a>
@@ -30,11 +30,90 @@
     
     <h2>Indeed Jobs</h2>
     <ul class="list-group">
-        {% for job in indeed_job %}
-            {% if job.jobinfo %}
+        {% for job in indeed_jobs %}
+            {% if job.job_title %}
                 <li class="list-group-item">
-                    <h4>{{ job.jobinfo }}</h4>
-                    <!-- Add other job details as needed -->
+                    <h4>{{ job.job_title }}</h4>
+                    {% if job.company_name %}
+                        <p>Company: {{ job.company_name }}</p>
+                    {% endif %}
+                    {% if job.location %}
+                        <p>Location: {{ job.location }}</p>
+                    {% endif %}
+                    {% if job.job_description %}
+                        <p>Description: {{ job.job_description }}</p>
+                    {% endif %}
+                    {% if job.application_url %}
+                        <a href="{{ job.application_url }}" class="btn btn-primary">Apply</a>
+                    {% else %}
+                        <button class="btn btn-disabled" disabled>No application link available</button>
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    
+    <br>
+    
+    <h2>Other Jobs</h2>
+    <ul class="list-group">
+        {% for job in ziprecruiter_jobs %}
+            {% if job.job_title %}
+                <li class="list-group-item">
+                    <h4>{{ job.job_title }}</h4>
+                    {% if job.company %}
+                        <p>Company: {{ job.company }}</p>
+                    {% endif %}
+                    {% if job.location %}
+                        <p>Location: {{ job.location }}</p>
+                    {% endif %}
+                    {% if job.description %}
+                        <p>Description: {{ job.description }}</p>
+                    {% endif %}
+                    {% if job.application_url %}
+                        <a href="{{ job.application_url }}" class="btn btn-primary">Apply</a>
+                    {% else %}
+                        <button class="btn btn-disabled" disabled>No application link available</button>
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endfor %}
+        
+        {% for job in naukri_jobs %}
+            {% if job.title %}
+                <li class="list-group-item">
+                    <h4>{{ job.title }}</h4>
+                    {% if job.company %}
+                        <p>Company: {{ job.company }}</p>
+                    {% endif %}
+                    {% if job.experience %}
+                        <p>Experience: {{ job.experience }}</p>
+                    {% endif %}
+                    {% if job.description %}
+                        <p>Description: {{ job.description }}</p>
+                    {% endif %}
+                    {% if job.application_url %}
+                        <a href="{{ job.application_url }}" class="btn btn-primary">Apply</a>
+                    {% else %}
+                        <button class="btn btn-disabled" disabled>No application link available</button>
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endfor %}
+        
+        {% for job in dice_jobs %}
+            {% if job.title %}
+                <li class="list-group-item">
+                    <h4>{{ job.title }}</h4>
+                    {% if job.company %}
+                        <p>Company: {{ job.company }}</p>
+                    {% endif %}
+                    {% if job.location %}
+                        <p>Location: {{ job.location }}</p>
+                    {% endif %}
+                    {% if job.description %}
+                        <p>Description: {{ job.description }}</p>
+                    {% endif %}
                     {% if job.application_url %}
                         <a href="{{ job.application_url }}" class="btn btn-primary">Apply</a>
                     {% else %}

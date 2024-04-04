@@ -14,13 +14,17 @@ import re
 import json
 import os
 
-path = 'jobseeker\chromedriver.exe'
+# path = 'jobseeker\chromedriver.exe'
 options = ChromeOptions()
 # options.add_argument('--headless')
 # options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 
-driver = Chrome(executable_path=path, options=options)
+# Specify the version of Chrome you want to use
+chrome_version = "122.0.6261.131"
+
+driver = Chrome(chrome_version=chrome_version, options=options)
+
 class ScrapeIndeed:
 
     def __init__(self, data):
@@ -323,7 +327,7 @@ class NaukriApp:
             print("Tags:", tags_list)
             print("Posting Date:", posting_date)
             print("\n")
-            return naukriJobInfo
+        return naukriJobInfo
 
 class DiceApp:
 
@@ -408,7 +412,9 @@ class DiceApp:
         resume_upload.send_keys(resume_path)
 
 
+
     def job_search(self):
+
         self.driver.get("https://www.dice.com/")
         # search based on keywords and location and hit enter
         search_keywords = self.driver.find_element(By.XPATH,'//*[@id="typeaheadInput"]')
@@ -435,10 +441,6 @@ class DiceApp:
             try:
                 title_element = search_card.find_element(By.CSS_SELECTOR, "a.card-title-link")
                 title = title_element.text
-                    # Get the value of the href attribute
-                application_url = title_element.get_attribute("href")
-
-                print("Link URL:", application_url)
             except:
                 title = "Not stated"
             
@@ -480,6 +482,16 @@ class DiceApp:
                 posted_date = posted_date_element.text
             except:
                 posted_date = "Not stated"
+
+            try:
+                title_element = search_card.find_element(By.CSS_SELECTOR, "a.card-title-link")
+
+                link_id = title_element.get_attribute("id")
+                # Generate the URL using the extracted ID
+                application_url = f"https://www.dice.com/job-detail/{link_id}"
+
+            except:
+                application_url = "Not stated"
             diceJob = {
                 'title': title,
                 'company': company,
@@ -498,25 +510,27 @@ class DiceApp:
             print("Description:", description)
             print("Employment Type:", employment_type)
             print("Posted Date:", posted_date)
+            print('application_url:', application_url)
             print("\n")
 
-        return diceJobInfo
+        return diceJobInfo  
+    
+    def easyApply(self, application_url):
+        self.driver.get(f"{application_url}")
+        try:
+            time.sleep(5)
+            apply = driver.find_element(By.ID, 'applyButton')
+            apply.click()
+        except Exception as e:
+            print(e)
+        next_button = driver.find_element(By.XPATH, '//*[@id="app"]/div/span/div/main/div[4]/button[2]')
+        next_button.click()
+        apply = driver.find_element(By.XPATH, '//*[@id="app"]/div/span/div/main/div[3]/button[2]')
+        apply.click()
+        print("Successfully applied to a job")
         
     def quit(self):
         self.driver.quit()
-        
-# data = {
-#      'email': "ekoech.mboya@gmail.com",
-#      'password': 'enock2005',
-#      'keywords': ['python '],
-#      'location': 'Remote'
-#      }
-# bot = DiceApp(data)
-# # bot.job_search()
-# # bot.extract_jobs()
-# bot.login()
-# bot.job_search()
-# bot.extract_jobs()
 
 #bot.extract_jobs()
 #bot.extractdata()
@@ -643,41 +657,7 @@ class EasyApplyLinkedin:
 
         return scraped_offers
 
-# # Close the WebDrive
-#         elements = WebDriverWait(self.driver, 30).until(
-#         EC.presence_of_all_elements_located((By.CLASS_NAME, "job-card-container"))
-#         )
-#         jobresults = []
-#         # Iterate over each element
-#         for element in elements:
-#             # Extract data from each element
-#             title = element.find_element(By.CLASS_NAME, "job-card-list__title").text
-#             company = element.find_element(By.CLASS_NAME, "job-card-container__primary-description").text
-#             location = element.find_element(By.CLASS_NAME, "job-card-container__metadata-item").text
-    
-#             # Print the extracted data
-#             print("Title:", title)
-#             print("Company:", company)
-#             print("Location:", location)
-#             print("-" * 50)
-
-#             jobresult = {title, company, location}
-#             jobresults.append(jobresult)
-#             return jobresults
-
-
-
-    # pagination = WebDriverWait(driver, 70).until(
-    #     EC.presence_of_element_located((By.CLASS_NAME, "artdeco-pagination__pages--number"))
-    # )
-    # buttons = pagination.find_elements(By.TAG_NAME, "button")
-    # for button in buttons:
-    #     driver.execute_script("arguments[0].scrollIntoView(true);", button)
-    #     button.click()
-            
-
-
-    def appply_to_job(self):
+    def apply_to_job(resume_path ,phone_number, self):
         time.sleep(10)
         job_apply_button = WebDriverWait(self.driver, 70).until(
     
@@ -689,15 +669,14 @@ class EasyApplyLinkedin:
         EC.presence_of_element_located((By.CSS_SELECTOR, 'input[id$="phoneNumber-nationalNumber"]'))
         )
         phone_number_field.clear()  # Clear any existing content in the field
-        phone_number_field.send_keys("1234567890")
+        phone_number_field.send_keys(f"{phone_number}")
 
         next_button = WebDriverWait(self.driver, 70).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, '[aria-label="Continue to next step"]'))
         )
         next_button.click()
         
-        resume_filename = 'resume.docx'
-        resume_path = os.path.abspath(resume_filename)
+
 
         file_input = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'input[id^="jobs-document-upload-file-input-upload-resume-"]'))
@@ -833,15 +812,4 @@ class EasyApplyLinkedin:
 
 
 
-data = {
-    'email': "ekoech.mboya@gmail.com",
-    'password': 'enock2005',
-    'keywords': ['python ', 'django ', 'automation'],
-    'location': 'Kenya'
-    }
-
-
-            # Initialize your automation script with user data
-# bot = EasyApplyLinkedin(data)
-# bot.apply()
 

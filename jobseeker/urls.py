@@ -7,6 +7,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name="logout"),
     path('searchjobs', views.searchjobs, name="search_jobs"),
     path('scrapedjobs', views.scrapedjobs, name="scrapedjobs"),
+    path('results', views.display_errors_and_success, name="results")
    # path('jobseeker/home/', views.jobseeker_home_view, name='jobseeker-home'),
 
 ]

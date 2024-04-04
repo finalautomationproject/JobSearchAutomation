@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-
+from phonenumber_field.modelfields import PhoneNumberField
+from django_countries.fields import CountryField
 
 class AllJobs(models.Model):
     id = models.AutoField(primary_key=True)
@@ -69,6 +70,11 @@ class JobSearchErrors(models.Model):
     error = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
 
+class JobSuccess(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    success_instance = models.CharField(max_length=255)
+    created_at = models.DateTimeField(default=timezone.now)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -78,6 +84,8 @@ class UserProfile(models.Model):
     indeed_password = models.CharField(max_length=100)
     profession = models.CharField(max_length=250)
     interests = models.CharField(max_length=255, blank=True)
+    phone_number = PhoneNumberField(blank=True, null=True)
+    country = CountryField(blank=True)
     location = models.CharField(max_length=100)
     resume = models.FileField(upload_to='documents/', blank=True)
 

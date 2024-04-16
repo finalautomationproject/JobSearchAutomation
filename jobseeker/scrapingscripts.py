@@ -16,8 +16,6 @@ import os
 
 # path = 'jobseeker\chromedriver.exe'
 options = ChromeOptions()
-# options.add_argument('--headless')
-# options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 
 # Specify the version of Chrome you want to use
@@ -31,7 +29,8 @@ class ScrapeIndeed:
         """Parameter initialization"""
          
         self.email = data['email']
-        self.password = data['password']
+        self.password = data['linkedin_password']
+        self.indeedpass = data['linkedin_password']
         self.keywords = data['keywords']
         self.location = data['location']
         self.driver = driver
@@ -135,18 +134,6 @@ class ScrapeIndeed:
         )
         continue_button.click()
 
-# data = {
-#      'email': "ekoech.mboya@gmail.com",
-#      'password': 'enock2005',
-#      'keywords': ['python '],
-#      'location': 'Remote'
-#      }
-# bot = ScrapeIndeed(data)
-# bot.search_jobs()
-# bot.job_results()
-
-
-
 
 class ZipRecruiterApp:
 
@@ -154,7 +141,6 @@ class ZipRecruiterApp:
         """Parameter initialization"""
          
         self.email = data['email']
-        self.password = data['password']
         self.keywords = data['keywords']
         self.location = data['location']
         self.driver = driver
@@ -234,7 +220,8 @@ class NaukriApp:
         """Parameter initialization"""
          
         self.email = data['email']
-        self.password = data['password']
+        self.linkedin_password = data['linkedin_password']            
+        self.dice_password = data['dice_password']
         self.keywords = data['keywords']
         self.location = data['location']
         self.driver = driver
@@ -335,7 +322,8 @@ class DiceApp:
         """Parameter initialization"""
         
         self.email = data['email']
-        self.password = data['password']
+        self.linkedin_password = data['linkedin_password']            
+        self.dice_password = data['dice_password']
         self.keywords = data['keywords']
         self.location = data['location']
         self.driver = driver
@@ -350,7 +338,7 @@ class DiceApp:
         # Find the password field and enter the password
         password_field = driver.find_element(By.ID, "password")
         password_field.clear()  # Clear any existing value in the field
-        password_field.send_keys(self.password)
+        password_field.send_keys(self.dice_password)
 
         # Submit the form
         password_field.send_keys(Keys.RETURN)
@@ -532,13 +520,6 @@ class DiceApp:
     def quit(self):
         self.driver.quit()
 
-#bot.extract_jobs()
-#bot.extractdata()
-# bot = ScrapeIndeed(data=data)
-# bot.search_jobs()
-# bot.job_results() 
-
-
 
 class EasyApplyLinkedin:
 
@@ -546,11 +527,11 @@ class EasyApplyLinkedin:
         """Parameter initialization"""
          
         self.email = data['email']
-        self.password = data['password']
+        self.linkedin_password = data['linkedin_password']            
+        self.dice_password = data['dice_password']
         self.keywords = data['keywords']
         self.location = data['location']
         self.driver = driver
-
 
     def login_linkedin(self):
        """This function logs into your personal LinkedIn profile"""
@@ -564,7 +545,7 @@ class EasyApplyLinkedin:
        login_email.send_keys(self.email)
        login_pass = self.driver.find_element(By.NAME, 'session_password')
        login_pass.clear()
-       login_pass.send_keys(self.password)
+       login_pass.send_keys(self.linkedin_password)
        login_pass.send_keys(Keys.RETURN)
 
     
@@ -681,7 +662,7 @@ class EasyApplyLinkedin:
         file_input = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'input[id^="jobs-document-upload-file-input-upload-resume-"]'))
         )
-# Send the file path to the file input element
+
         file_input.send_keys(resume_path)
 
         review_button = WebDriverWait(self.driver, 70).until(
@@ -719,7 +700,7 @@ class EasyApplyLinkedin:
             # find the last page and construct url of each page based on the total amount of pages
             find_pages = self.driver.find_elements(By.CLASS_NAME, "artdeco-pagination__indicator.artdeco-pagination__indicator--number")
 
-# Check if find_pages is not empty before accessing its elements
+
         if find_pages:
             total_pages = find_pages[len(find_pages) - 1].text
             total_pages_int = int(re.sub(r"[^\d.]", "", total_pages))

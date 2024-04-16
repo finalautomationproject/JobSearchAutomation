@@ -82,6 +82,7 @@ class UserProfile(models.Model):
     avatar = models.ImageField(upload_to='userimages/', blank=True)
     linkedin_password = models.CharField(max_length=100)
     indeed_password = models.CharField(max_length=100)
+    dice_password = models.CharField(max_length=100)
     profession = models.CharField(max_length=250)
     interests = models.CharField(max_length=255, blank=True)
     phone_number = PhoneNumberField(blank=True, null=True)

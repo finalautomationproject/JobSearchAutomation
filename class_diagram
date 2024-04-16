@@ -1,0 +1,31 @@
+digraph {
+	User [label="User
+- username
+- email
+- password
++ login()
++ logout()
++ update_profile()
++ reset_password()"]
+	Administrator [label="Administrator
+- username
+- email
+- password
++ manage_users()
++ view_logs()"]
+	JobSearch [label="JobSearch
+- keywords
+- location
++ search_jobs()
++ refine_search_criteria()"]
+	JobApplication [label="JobApplication
+- jobListings
++ apply_to_jobs()"]
+	JobListing [label="JobListing
+- title
+- company
+- location"]
+	User -> JobSearch
+	User -> JobApplication
+	JobSearch -> JobListing
+}

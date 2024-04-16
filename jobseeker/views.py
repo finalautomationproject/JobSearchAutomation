@@ -40,9 +40,9 @@ def searchjobs(request):
     userinfo = get_object_or_404(UserProfile, user=request.user)
     data = {
         'email': userinfo.email,
-        'password': userinfo.linkedin_password,
+        'linkedin_password': userinfo.linkedin_password,
+        'dice_password': userinfo.dice_password,
         'keywords': userinfo.interests,
-        'country': userinfo.country,
         'location': userinfo.location
     }
     form = userinfo
@@ -151,28 +151,28 @@ def searchjobs(request):
             except Exception as e:
                 error = JobSearchErrors(user = request.user, error_instance='Indeed Search', error=e)
                 error.save()
-                print("Could not complete search:"+ e)
+                print("Could not complete search:", e)
         elif 'Dicesearch' in request.POST:
             try:
                 dicesearch()
             except Exception as e:
                 error = JobSearchErrors(user = request.user, error_instance='Dice Search', error=e)
                 error.save()
-                print("Could not complete search:"+ e)
+                print("Could not complete search:", e)
         elif 'Naukrisearch' in request.POST:
             try:
                 naukrisearch()
             except Exception as e:
                 error = JobSearchErrors(user = request.user, error_instance='Naukri Search', error=e)
                 error.save()
-                print("Could not complete search:"+ e)
+                print("Could not complete search:", e)
         elif 'ZipRecruitersearch' in request.POST:
             try:
                 ziprecruitersearch()
             except Exception as e:
                 error = JobSearchErrors(user=request.user.id, error_instance='ZipRecruiter Search', error=e)
                 error.save()
-                print("Could not complete searches:"+ e)
+                print("Could not complete searches:", e)
         elif 'AllWebsiteSearch' in request.POST:
             try:
                 linkedinsearch()
@@ -194,7 +194,8 @@ def scrapedjobs(request):
     userinfo = get_object_or_404(UserProfile, user=request.user)
     data = {
         'email': userinfo.email,
-        'password': userinfo.linkedin_password,
+        'linkedin_password': userinfo.linkedin_password,
+        'dice_password': userinfo.dice_password,
         'keywords': userinfo.interests,
         'location': userinfo.location
     }
@@ -256,7 +257,10 @@ def display_errors_and_success(request):
 
 
 def home(request):
-    userinfo = get_object_or_404(UserProfile, user=request.user)
+    try:
+        userinfo = get_object_or_404(UserProfile, user=request.user)
+    except:
+        return redirect('userinfo')
     alljobs = AllJobs.objects.all()
     try:
         avatar = userinfo.avatar.url

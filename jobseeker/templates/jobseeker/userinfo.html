@@ -12,25 +12,45 @@
       <div class="card p-4">
         <form method="post" action="{% url 'userinfo' %}" enctype="multipart/form-data" class="mt-4">
           {% csrf_token %}
-          {{ form.email|as_crispy_field }}
-          {{ form.phone_number|as_crispy_field }}
-          {{ form.linkedin_password|as_crispy_field }}
-          {{ form.indeed_password|as_crispy_field }}
-          {{ form.dice_password|as_crispy_field }}
-          {{ form.profession|as_crispy_field }}
-
+          {% if form.email %}
+            {{ form.email|as_crispy_field }}
+          {% endif %}
+          {% if form.phone_number %}
+            {{ form.phone_number|as_crispy_field }}
+          {% endif %}
+          {% if form.linkedin_password %}
+            {{ form.linkedin_password|as_crispy_field }}
+          {% endif %}
+          {% if form.indeed_password %}
+            {{ form.indeed_password|as_crispy_field }}
+          {% endif %}
+          {% if form.dice_password %}
+            {{ form.dice_password|as_crispy_field }}
+          {% endif %}
+          {% if form.profession %}
+            {{ form.profession|as_crispy_field }}
+          {% endif %}
       </div>
     </div>
     <div class="col-md-6">
       <div class="card p-4">
-
-        {{ form.interests|as_crispy_field }}
-        {{ form.country|as_crispy_field }}
-        {{ form.location|as_crispy_field }}
+        {% if form.interests %}
+          {{ form.interests|as_crispy_field }}
+        {% endif %}
+        {% if form.country %}
+          {{ form.country|as_crispy_field }}
+        {% endif %}
+        {% if form.location %}
+          {{ form.location|as_crispy_field }}
+        {% endif %}
         <h3 class="text-center">Upload Files</h3>
+        {% if form.avatar %}
           {{ form.avatar|as_crispy_field }}
+        {% endif %}
+        {% if form.resume %}
           {{ form.resume|as_crispy_field }}
-          <button type="submit" class="btn btn-primary">Proceed to Application</button>
+        {% endif %}
+        <button type="submit" class="btn btn-primary">Proceed to Application</button>
         </form>
       </div>
     </div>

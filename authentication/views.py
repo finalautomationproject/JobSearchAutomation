@@ -59,5 +59,5 @@ def logout_view(request):
     return redirect('login')
 
 def jobseeker_home_view(request):
-    return render(request, 'jobseeker/userinfo.html')
+    return render(request, 'jobseeker/home.html')
 

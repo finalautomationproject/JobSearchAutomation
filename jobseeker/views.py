@@ -9,29 +9,38 @@ from .scrapingscripts import ScrapeIndeed, DiceApp, ZipRecruiterApp, NaukriApp, 
 from .models import UserProfile  # Import the UserProfile model
 
 
+from django.shortcuts import render, redirect
+from .models import UserProfile, JobSuccess
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def userinfo(request):
+    try:
+        # Check if user profile already exists
+        user_profile = UserProfile.objects.get(user=request.user)
+        # Populate the form with existing user profile data
+        form = UserProfileForm(instance=user_profile)
+    except UserProfile.DoesNotExist:
+        # If user profile does not exist, create an empty form
+        form = UserProfileForm()
+
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES)
+        # Bind the form to the POST data
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
-            try:
-                user_profile = UserProfile.objects.get(user=request.user)
-                form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
-            except UserProfile.DoesNotExist:
-                form = UserProfileForm(request.POST, request.FILES)
+            # Save the form data
+            user_profile = form.save(commit=False)
+            user_profile.user = request.user
+            user_profile.save()
 
-            if form.is_valid():
-                form.instance.user = request.user
-                form.save()
-                success = JobSuccess(user= request.user, success_instance="User Information Saved")
-                success.save()
-                return redirect('search_jobs')  
-    else:
-        try:
-            user_profile = UserProfile.objects.get(user=request.user)
-            form = UserProfileForm(instance=user_profile)
-        except UserProfile.DoesNotExist:
-            form = UserProfileForm()
+            # Create JobSuccess instance
+            success = JobSuccess(user=request.user, success_instance="User Information Saved")
+            success.save()
 
+            # Redirect to search_jobs page
+            return redirect('search_jobs')
+
+    # Render the template with the form
     return render(request, 'jobseeker/userinfo.html', {'form': form})
 
 
@@ -139,11 +148,11 @@ def searchjobs(request):
     if request.method == 'POST':
         if 'Linkedinsearch' in request.POST:
             try:
-                naukrisearch()
+                linkedinsearch()
             except Exception as e:
                 error = JobSearchErrors(user = request.user, error_instance='LinkedIn Search', error=e)
                 error.save()
-                print("Could not complete search:"+ e)    
+                print("Could not complete search:", e)    
 
         elif 'Indeedsearch' in request.POST:
             try:
@@ -231,6 +240,26 @@ def scrapedjobs(request):
                 except Exception as e:
                     print("Error", e)
                     return redirect('results')
+        if 'delete_linkedin' in request.POST:
+            job_id = request.POST.get('delete_linkedin')
+            job = ScrapedJob.objects.get(id=job_id)
+            job.delete()
+        if 'delete_indeed' in request.POST:
+            job_id = request.POST.get('delete_indeed')
+            job = ScrapeIndeed.objects.get(id=job_id)
+            job.delete()
+        if 'delete_dice' in request.POST:
+            job_id = request.POST.get('delete_dice')
+            job = DiceJob.objects.get(id=job_id)
+            job.delete()
+        if 'delete_naukri' in request.POST:
+            job_id = request.POST.get('delete_naukri')
+            job = NaukriJob.objects.get(id=job_id)
+            job.delete()
+        if 'delete_ziprecruiter' in request.POST:
+            job_id = request.POST.get('delete_ziprecruiter')
+            job = ZipRecruiterJob.objects.get(id=job_id)
+            job.delete()
     for object in indeed_jobs:
         if object == "":
             object.delete()
@@ -238,8 +267,6 @@ def scrapedjobs(request):
                 'naukri_jobs': naukri_jobs, 'dice_jobs': dice_jobs}    
     return render(request, 'jobseeker/scrapedjobs.html', context)
 
-from django.shortcuts import render
-from .models import JobSearchErrors, JobSuccess
 
 def display_errors_and_success(request):
     # Retrieve JobSearchErrors and JobSuccess instances

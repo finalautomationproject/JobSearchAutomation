@@ -73,7 +73,7 @@ class ScrapeIndeed:
                 job_title = 'Not Stated'
             try:
                 job = job_element.find_element(By.CSS_SELECTOR, '.jobTitle')
-                application_url = 'Not Stated'
+                application_url = job.get_attribute('href')
             except:
                 application_url = 'Not Stated'
 
